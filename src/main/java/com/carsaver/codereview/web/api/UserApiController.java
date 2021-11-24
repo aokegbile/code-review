@@ -24,7 +24,7 @@ public class UserApiController {
 
     @Autowired
     private ZipCodeLookupService zipCodeLookupService;
-
+// CODEREVIEW. Should this be a post? Should it be passing a object?
     @GetMapping(value = "/users/create", params={"firstName","lastName","email"})
     public User createuser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email) {
         return createuser(firstName,lastName,email,null,null);

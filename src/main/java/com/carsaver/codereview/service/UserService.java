@@ -7,19 +7,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toMap;
 
 @Service
 public class UserService {
-    private UserRepository repository;
-    private EmailService emailService;
+    private final UserRepository repository;
+    private final EmailService emailService;
 
-    public UserService (UserRepository repository) {
+    public UserService(UserRepository repository, EmailService emailService) {
         this.repository = repository;
+        this.emailService = emailService;
     }
 
     public Optional<User> findById(Long id) {
@@ -50,5 +49,4 @@ public class UserService {
                 .collect(toMap(User::getId, user -> user.getFirstName() + ", " + user.getFirstName()));
 
     }
-
 }
