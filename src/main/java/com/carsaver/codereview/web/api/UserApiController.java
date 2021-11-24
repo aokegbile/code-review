@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
-//CODEREVIEW SHould this be replaced with rest controller? or add requestbody to responses
+//CODEREVIEW SHould this be replaced with rest controller? or add requestbody to responses?
+//Should the views be implemented?
 @Controller
 public class UserApiController {
 
