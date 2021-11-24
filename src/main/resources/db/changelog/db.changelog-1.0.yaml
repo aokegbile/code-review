@@ -22,6 +22,17 @@ databaseChangeLog:
         - column:
             name: email
             type: VARCHAR(255)
+        - column:
+            name: city
+            type: VARCHAR(255)
+        - column:
+            name: zip_code
+            type: int(5)
+        - column:
+            name: enabled
+            type: boolean
+            defaultValue: false
+
 - changeSet:
       id: populate user table
       author: josh

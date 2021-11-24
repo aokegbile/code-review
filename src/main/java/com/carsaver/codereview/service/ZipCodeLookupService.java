@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class ZipCodeLookupService {
 
     /**
-     * @param zipCode
+     * @param zipCode Supplied ZipCode
      * @return - returns city for the given zipCode.
      */
     public String lookupCityByZip(String zipCode) {
@@ -18,7 +18,7 @@ public class ZipCodeLookupService {
         } catch(Exception ignore) {
 
         }
-
+        //CODEREVIEW Should be returning city not zipcode. https://www.zipcodeapi.com/
         return "37067";
     }
 

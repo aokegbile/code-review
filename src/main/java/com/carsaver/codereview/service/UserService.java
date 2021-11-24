@@ -25,35 +25,29 @@ public class UserService {
     public Optional<User> findById(Long id) {
         return repository.findById(id);
     }
-
+    //CODEREVIEW should we implement other sorts?
     public List<User> findAll(){
         return repository.findAllByOrderByIdAsc();
     }
-
+    //CODEREVIEW SEMANTIC, I would make this non nullable call, make callers check and handle nulls.
+    // Should unused methods be removed?
     public User updateEmail(User user, String email) {
-        try {
-            if (user != null) {
-                if (user.getId() != null)
-                    if (email != null) {
-                        user.setEmail(email);
-                        repository.save(user);
-                        emailService.sendConfirmation(email);
-                    }
-                else
-                    return user;
-            }
-        } catch(Exception e) {
-            System.out.println(e.getMessage());
+        if (user != null) {
+            if (user.getId() != null)
+                if (email != null) {
+                    user.setEmail(email);
+                    repository.save(user);
+                    emailService.sendConfirmation(email);
+                }
+            else
+                return user;
         }
-
         return user;
     }
-
+    // Should unused methods be removed?
     public Map<Long, String> getNames() {
         return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .collect(toMap(User::getId, user -> {
-                    return user.getFirstName() + ", " + user.getFirstName();
-                }));
+                .collect(toMap(User::getId, user -> user.getFirstName() + ", " + user.getFirstName()));
 
     }
 
