@@ -46,7 +46,7 @@ public class UserService {
     //CODEREVIEW Should unused methods be removed?
     public Map<Long, String> getNames() {
         return StreamSupport.stream(repository.findAll().spliterator(), false)
-                .collect(toMap(User::getId, user -> user.getFirstName() + ", " + user.getFirstName()));
+                .collect(toMap(User::getId, user -> user.getFirstName() + ", " + user.getLastName()));
 
     }
 }

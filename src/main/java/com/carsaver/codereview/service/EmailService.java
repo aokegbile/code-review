@@ -8,5 +8,4 @@ public class EmailService {
     public void sendConfirmation(String email) {
         System.out.print("sending confirmation to " + email);
     }
-
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+//CODEREVIEW RestController vs Controller
 @RestController
 public class UserController {
     private final UserService userService;

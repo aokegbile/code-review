@@ -5,12 +5,15 @@ import com.carsaver.codereview.repository.UserRepository;
 import com.carsaver.codereview.service.ZipCodeLookupService;
 import com.carsaver.codereview.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
+
 //CODEREVIEW SHould this be replaced with rest controller? or add requestbody to responses?
 //Should the views be implemented?
 @Controller
@@ -24,15 +27,17 @@ public class UserApiController {
 
     @Autowired
     private ZipCodeLookupService zipCodeLookupService;
-// CODEREVIEW. Should this be a post? Should it be passing a object?
-    @GetMapping(value = "/users/create", params={"firstName","lastName","email"})
-    public User createuser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email) {
-        return createuser(firstName,lastName,email,null,null);
+
+    // CODEREVIEW. Should this be a post? Should it be passing a object?
+    @GetMapping(value = "/users/create", params = {"firstName", "lastName", "email"})
+    public User createuser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email,
+                           Model model) {
+        return createuser(firstName, lastName, email, null, null, model);
     }
 
-    @GetMapping(value="/users/create", params={"firstName","lastName","email","zipCode","city"})
+    @GetMapping(value = "/users/create", params = {"firstName", "lastName", "email", "zipCode", "city"})
     public User createuser(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email,
-                           @RequestParam String zipCode, @RequestParam String city) {
+                           @RequestParam String zipCode, @RequestParam String city, Model model) {
         User newUser = new User();
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
@@ -40,24 +45,25 @@ public class UserApiController {
         newUser.setZipCode(zipCode);
         newUser.setCity(city);
 
-        if(!email.contains("@test.com")) {
-            newUser.enabled = true;
+        if (!email.contains("@test.com")) {
+            newUser.setEnabled(true);
         }
 
         User user = userRepository.save(newUser);
 
-        if(user.isEnabled()) {
+        if (user.isEnabled()) {
             emailService.sendConfirmation(email);
         }
-
+        model.addAttribute("user", user);
         return user;
     }
 
     /**
      * updates user's address
-     * @param id - assume valid existing id
+     *
+     * @param id      - assume valid existing id
      * @param zipCode - assume valid zipCode
-     * @param city - assume valid if present otherwise null
+     * @param city    - assume valid if present otherwise null
      * @return updated User
      */
     @GetMapping("/users/updateLocation")
@@ -69,9 +75,15 @@ public class UserApiController {
 
         return userRepository.save(user);
     }
+
     //CODEREVIEW replace get mapping with update location
     @DeleteMapping("/users/delete")
     public void deleteUser(@RequestParam String userid) {
-        userRepository.deleteById(Long.parseLong(userid));
+        try {
+            userRepository.deleteById(Long.parseLong(userid));
+        } catch (EmptyResultDataAccessException e) {
+            //Code Review Handle Failure to delete.. chose to update user or not.
+
+        }
     }
 }
